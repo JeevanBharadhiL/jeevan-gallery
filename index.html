@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 5;
+            font-family: Academy engraved LET;
+            background-image: linear-gradient(to bottom, #feffff, rgba(254, 254, 254, 0.7)), url('download.jfif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .header h1 {
+            color: rgb(34, 34, 34);
+            font-weight: 700;
+            font-size: 70px;
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
+        }
+
+
+        .row {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            padding: 0 4px;
+        }
+
+        .column {
+            -ms-flex: 20%;
+            flex: 25%;
+            max-width: 30%;
+            padding: 0 6px;
+        }
+
+        .column img {
+            margin-top: 10px;
+            vertical-align: middle;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        #modal-image {
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            margin-top: 5%;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .prev,
+        .next,
+        .download-link {
+            font-size: 20px;
+            padding: 15px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin: 0 40px;
+        }
+
+        .download-link {
+            background-color: #333; 
+        }
+
+        .prev:hover,
+        .next:hover,
+        .download-link:hover {
+            background-color: #444444;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1> <u>Image Gallery </u></h1>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <img src="img1.jpeg" style="width:100%" class="gallery-image">
+            <img src="img2.jpeg" style="width:100%" class="gallery-image">
+            <img src="img3.jpeg" style="width:100%" class="gallery-image">
+            <img src="img4.jpeg" style="width:100%" class="gallery-image">
+            <img src="img5.jpeg" style="width:100%" class="gallery-image">
+            <img src="22.jpeg" style="width:100%" class="gallery-image">
+        </div>
+        <div class="column">
+            <img src="img6.jpeg" style="width:100%" class="gallery-image">
+            <img src="img7.jpeg" style="width:100%" class="gallery-image">
+            <img src="img8.jpeg" style="width:100%" class="gallery-image">
+            <img src="9.jpeg" style="width:100%" class="gallery-image">
+            <img src="10.jpeg" style="width:100%" class="gallery-image">
+        </div>
+        <div class="column">
+            <img src="11.jpeg" style="width:100%" class="gallery-image">
+            <img src="12.jpeg" style="width:100%" class="gallery-image">
+            <img src="13.jpeg" style="width:100%" class="gallery-image">
+            <img src="14.jpeg" style="width:100%" class="gallery-image">
+            <img src="15.jpeg" style="width:100%" class="gallery-image">
+            <img src="21.jpeg" style="width:100%" class="gallery-image">
+        </div>
+        <div class="column">
+            <img src="16.jpeg" style="width:100%" class="gallery-image">
+            <img src="17.jpeg" style="width:100%" class="gallery-image">
+            <img src="18.jpeg" style="width:100%" class="gallery-image">
+            <img src="19.jpeg" style="width:100%" class="gallery-image">
+            <img src="20.jpeg" style="width:100%" class="gallery-image">
+        </div>
+    </div>
+
+    <div id="image-modal" class="modal">
+        <span class="close">&times;</span>
+        <img src="" id="modal-image" alt="Modal Image">
+        <div class="modal-buttons">
+            <button class="prev">&#10094; Previous</button>
+            <a href="#" download id="download-link" class="download-link">Download</a>
+            <button class="next">Next &#10095;</button>
+        </div>
+    </div>
+
+    <script>
+             const galleryImages = document.querySelectorAll('.gallery-image');
+        const modal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const closeModalButton = document.querySelector('.close');
+        const nextButton = document.querySelector('.next');
+        const prevButton = document.querySelector('.prev');
+        const downloadLink = document.getElementById('download-link');
+
+        let currentIndex = 0;
+
+        galleryImages.forEach((image, index) => {
+            image.addEventListener('click', () => {
+                modal.style.display = 'block';
+                currentIndex = index;
+                modalImage.src = image.src;
+
+                // Update download link
+                downloadLink.href = image.src;
+                downloadLink.download = `image${currentIndex + 1}.jpeg`;
+            });
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            modalImage.src = galleryImages[currentIndex].src;
+            updateDownloadLink();
+        });
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            modalImage.src = galleryImages[currentIndex].src;
+            updateDownloadLink();
+        });
+
+        function updateDownloadLink() {
+            downloadLink.href = galleryImages[currentIndex].src;
+            downloadLink.download = `image${currentIndex + 1}.jpeg`;
+        }
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Copyright notice in the footer -->
+    <div style="background-color: rgba(0, 0, 0, 0.9); color: white; text-align: center; padding: 40px;">
+      <h2>  &copy; 2023 L Jeevan Bharadhi </h2>
+    </div>
+
+</body>
+
+</html>
